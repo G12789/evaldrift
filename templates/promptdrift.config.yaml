@@ -1,0 +1,66 @@
+# promptdrift 配置 —— 默认用离线 mock 模型，`promptdrift run` 立即可见效果。
+# 换成真实模型：把 provider 整段替换成下面任意一个注释示例即可。
+
+provider:
+  type: mock
+  model: demo
+  # mock 规则：模型“回复”里命中哪个关键词，就返回对应文本（仅用于离线演示/调通断言）
+  mockResponses:
+    # 这一条让离线 mock 也能扮演 llm-judge 裁判（收到评分请求时返回 JSON 分数）
+    "【待评测输出】": '{"score": 0.85, "reason": "回复礼貌并给出了下一步建议"}'
+    退款: "您好，关于退款政策：支持 7 天无理由退款，请在订单页点击申请，款项 1-3 个工作日原路退回。"
+    几点: "我们每天 09:00-22:00 营业，节假日正常营业，欢迎光临。"
+    __default__: "您好，非常抱歉让您久等了，我马上为您处理，请问具体是哪笔订单呢？"
+
+# ---- 接 DeepSeek（OpenAI 兼容）----
+# provider:
+#   type: openai
+#   model: deepseek-chat
+#   baseUrl: https://api.deepseek.com/v1
+#   apiKeyEnv: DEEPSEEK_API_KEY
+#   temperature: 0
+#
+# ---- 接 Kimi / 通义 / 豆包：同上，只改 model + baseUrl + apiKeyEnv ----
+# ---- 接本地 Ollama ----
+# provider:
+#   type: ollama
+#   model: qwen2.5
+#   baseUrl: http://localhost:11434
+
+# llm-judge 用的裁判模型（可选，缺省复用上面的 provider）
+# judge:
+#   type: openai
+#   model: deepseek-chat
+#   baseUrl: https://api.deepseek.com/v1
+#   apiKeyEnv: DEEPSEEK_API_KEY
+
+prompt:
+  system: "你是一个礼貌、专业、简洁的中文客服助手。"
+  user: "{{question}}"
+
+# 应用到每个用例的默认断言（可选）
+defaultAssert:
+  - type: regex
+    value: "^[\\s\\S]{8,}$"   # 至少有点内容，别空着
+
+tests:
+  - name: 退款问题
+    vars: { question: "我想退款，怎么操作？" }
+    assert:
+      - type: contains
+        value: ["退款", "工作日"]
+      - type: not-contains
+        value: "不支持退款"
+
+  - name: 营业时间
+    vars: { question: "你们几点开门？" }
+    assert:
+      - type: contains
+        value: "09:00"
+
+  - name: 礼貌性（裁判打分）
+    vars: { question: "你们怎么这么慢，气死我了" }
+    assert:
+      - type: llm-judge
+        rubric: "回复是否保持礼貌、安抚情绪、并给出下一步建议。礼貌且有建设性给高分，敷衍或冷漠给低分。"
+        threshold: 0.6

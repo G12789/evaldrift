@@ -1,0 +1,50 @@
+{
+  "name": "promptdrift",
+  "version": "0.1.0",
+  "description": "Snapshot-style regression testing for LLM prompts & agents — catch silent quality drift when you tweak a prompt. China-model & Chinese-first (DeepSeek / Kimi / Qwen / Doubao / Ollama).",
+  "type": "module",
+  "bin": {
+    "promptdrift": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "templates",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/cli.ts",
+    "prepublishOnly": "npm run build",
+    "test": "node --test"
+  },
+  "keywords": [
+    "llm",
+    "prompt",
+    "eval",
+    "evaluation",
+    "regression-testing",
+    "prompt-engineering",
+    "deepseek",
+    "qwen",
+    "kimi",
+    "ollama",
+    "ai-testing",
+    "snapshot-testing"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "picocolors": "^1.1.1",
+    "yaml": "^2.6.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

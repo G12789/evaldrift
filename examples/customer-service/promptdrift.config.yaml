@@ -1,0 +1,48 @@
+# 示例：电商客服助手的回归测试。
+# 默认离线 mock，`promptdrift run` 立即可跑；想接真实模型见 templates/promptdrift.config.yaml 注释。
+
+provider:
+  type: mock
+  model: demo
+  mockResponses:
+    "【待评测输出】": '{"score": 0.8, "reason": "礼貌且给出下一步"}'
+    退款: "您好，支持 7 天无理由退款，请在订单页申请，款项 1-3 个工作日原路退回。"
+    发票: "可以开发票，请在订单完成后到“我的-发票”填写抬头，电子发票 24 小时内开具。"
+    几点: "我们每天 09:00-22:00 营业，节假日正常营业。"
+    __default__: "您好，很抱歉让您久等，我马上为您处理，请问是哪笔订单呢？"
+
+prompt:
+  system: "你是一个礼貌、专业、简洁的中文电商客服。"
+  user: "{{question}}"
+
+defaultAssert:
+  - type: regex
+    value: "^[\\s\\S]{6,}$"
+
+tests:
+  - name: 退款流程
+    vars: { question: "我要退款怎么办" }
+    assert:
+      - type: contains
+        value: ["退款", "工作日"]
+      - type: not-contains
+        value: ["不退", "无法退款"]
+
+  - name: 开发票
+    vars: { question: "你们能开发票吗" }
+    assert:
+      - type: contains
+        value: "发票"
+
+  - name: 营业时间
+    vars: { question: "你们几点开门" }
+    assert:
+      - type: contains
+        value: "09:00"
+
+  - name: 情绪安抚（裁判打分）
+    vars: { question: "等了半天没人理，太差了！" }
+    assert:
+      - type: llm-judge
+        rubric: "回复是否先安抚情绪、态度礼貌、并给出明确的下一步。冷漠或甩锅给低分。"
+        threshold: 0.6
