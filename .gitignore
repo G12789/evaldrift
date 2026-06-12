@@ -6,3 +6,5 @@ dist/
 .env.*
 # evaldrift run artifacts inside example/user projects
 .evaldrift/runs/
+.ci-smoke-tmp/
+.demo-tmp/

@@ -1,22 +1,22 @@
 # evaldrift
 
+[![npm](https://img.shields.io/npm/v/evaldrift)](https://www.npmjs.com/package/evaldrift)
+[![CI](https://github.com/G12789/evaldrift/actions/workflows/ci.yml/badge.svg)](https://github.com/G12789/evaldrift/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 > 给 LLM prompt / agent 做**快照式回归测试**——改一句提示词，第一时间知道有没有把别的用例悄悄改坏了。
 >
 > **国产模型 & 中文优先**：DeepSeek / Kimi / 通义 / 豆包 / 智谱 / 本地 Ollama 开箱即用。
 
 调 prompt 最大的坑是：你为了修好 A 场景改了提示词，结果悄悄把 B、C 场景弄坏了，而你根本没发现，直到用户来投诉。`evaldrift` 把这件事变成像跑单元测试一样简单——锁一个**基线**，之后每次改提示词跑一下，它直接告诉你**哪些用例退化了**。
 
-```
-✓ 退款问题  ██████████ 100%  120ms
-✗ 营业时间  ░░░░░░░░░░   0%   98ms
-    ✗ [contains] 缺少关键词: 09:00
-✓ 情绪安抚  █████████░  85%  340ms
-────────────────────────────────────────
-对比基线：
-  ↓ 退化 营业时间  100% → 0% (-100%) [通过→失败]
+<p align="center">
+  <img src="docs/demo-terminal.png" alt="evaldrift 终端输出：检出 prompt 退化" width="780" />
+</p>
 
-1 处退化 · 0 处改进
-```
+<p align="center">
+  <img src="docs/demo-report.png" alt="evaldrift HTML 报告" width="780" />
+</p>
 
 ## 为什么用它（而不是 promptfoo / deepeval）
 

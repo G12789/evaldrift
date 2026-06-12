@@ -16,7 +16,9 @@
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/cli.ts",
     "prepublishOnly": "npm run build",
-    "test": "node --test"
+    "test": "node --test",
+    "test:smoke": "node scripts/ci-smoke.mjs",
+    "demo:assets": "node scripts/gen-demo.mjs"
   },
   "keywords": [
     "llm",

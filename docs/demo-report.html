@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>evaldrift 报告 · demo</title>
+<style>
+  :root { --ok:#16a34a; --bad:#dc2626; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --bg:#f8fafc; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--ink);padding:32px;line-height:1.5}
+  .wrap{max-width:980px;margin:0 auto}
+  h1{font-size:20px;font-weight:800}
+  .meta{color:var(--muted);font-size:13px;margin-top:4px}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .card .n{font-size:26px;font-weight:800}
+  .card .l{font-size:12px;color:var(--muted);margin-top:2px}
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr.pass .mark{color:var(--ok)} tr.fail .mark{color:var(--bad)}
+  .mark{font-weight:800;width:28px;text-align:center}
+  .name{font-weight:700}
+  .score{width:140px;font-variant-numeric:tabular-nums;color:var(--muted)}
+  .sbar{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-bottom:4px}
+  .sbar i{display:block;height:100%;background:var(--ok)}
+  tr.fail .sbar i{background:var(--bad)}
+  .lat{width:80px;color:var(--muted);font-size:13px}
+  tr.detail td{padding-top:0;border-bottom:1px solid var(--line)}
+  .assert{font-size:13px;margin:3px 0}
+  .assert.ok{color:var(--ok)} .assert.bad{color:var(--bad)} .assert.dim{color:var(--muted)}
+  .assert code{background:#f1f5f9;padding:1px 6px;border-radius:5px;color:var(--ink)}
+  details{margin-top:6px} summary{cursor:pointer;color:var(--muted);font-size:13px}
+  pre{background:#0f172a;color:#e2e8f0;padding:12px;border-radius:8px;margin-top:6px;white-space:pre-wrap;word-break:break-word;font-size:12px;max-height:320px;overflow:auto}
+  .err{color:var(--bad);font-size:13px}
+  .badge{font-size:11px;font-weight:700;padding:1px 7px;border-radius:99px;margin-left:6px}
+  .badge.reg{background:#fee2e2;color:#b91c1c} .badge.imp{background:#dcfce7;color:#15803d}
+  .badge.new{background:#e0f2fe;color:#0369a1} .badge.rm{background:#f1f5f9;color:#64748b}
+  .reg{color:var(--bad);font-weight:700} .imp{color:var(--ok);font-weight:700} .dim{color:var(--muted)}
+  footer{color:var(--muted);font-size:12px;text-align:center;margin-top:20px}
+</style></head>
+<body><div class="wrap">
+  <h1>evaldrift 报告</h1>
+  <div class="meta">mock / demo · 2026-06-12T15:54:32.980Z</div>
+  <div class="cards">
+    <div class="card"><div class="n">3/4</div><div class="l">通过</div></div>
+    <div class="card"><div class="n" style="color:var(--bad)">1</div><div class="l">失败</div></div>
+    <div class="card"><div class="n">89%</div><div class="l">平均分</div></div>
+    <div class="card"><div class="n" style="font-size:15px;padding-top:8px"><span class="reg">1 处退化</span> · <span class="imp">0 处改进</span></div><div class="l">对比基线</div></div>
+  </div>
+  <table><tbody>
+      <tr class="fail">
+        <td class="mark">✗</td>
+        <td class="name">退款流程 <span class="badge reg">退化 -33%</span></td>
+        <td class="score"><div class="sbar"><i style="width:67%"></i></div>67%</td>
+        <td class="lat">1ms</td>
+      </tr>
+      <tr class="detail fail">
+        <td></td>
+        <td colspan="3">
+          <div class="assert ok"><span>✓</span> <code>regex</code> 匹配正则 /^[\s\S]{6,}$/</div><div class="assert bad"><span>✗</span> <code>contains</code> 缺少关键词: 工作日</div><div class="assert ok"><span>✓</span> <code>not-contains</code> 未出现禁止词</div>
+          <details><summary>模型输出</summary><pre>您好，支持 7 天无理由退款，请在订单页申请，请自行联系客服处理。</pre></details>
+        </td>
+      </tr>
+      <tr class="pass">
+        <td class="mark">✓</td>
+        <td class="name">开发票 </td>
+        <td class="score"><div class="sbar"><i style="width:100%"></i></div>100%</td>
+        <td class="lat">0ms</td>
+      </tr>
+      <tr class="detail pass">
+        <td></td>
+        <td colspan="3">
+          <div class="assert ok"><span>✓</span> <code>regex</code> 匹配正则 /^[\s\S]{6,}$/</div><div class="assert ok"><span>✓</span> <code>contains</code> 包含全部关键词: 发票</div>
+          <details><summary>模型输出</summary><pre>可以开发票，请在订单完成后到“我的-发票”填写抬头，电子发票 24 小时内开具。</pre></details>
+        </td>
+      </tr>
+      <tr class="pass">
+        <td class="mark">✓</td>
+        <td class="name">营业时间 </td>
+        <td class="score"><div class="sbar"><i style="width:100%"></i></div>100%</td>
+        <td class="lat">0ms</td>
+      </tr>
+      <tr class="detail pass">
+        <td></td>
+        <td colspan="3">
+          <div class="assert ok"><span>✓</span> <code>regex</code> 匹配正则 /^[\s\S]{6,}$/</div><div class="assert ok"><span>✓</span> <code>contains</code> 包含全部关键词: 09:00</div>
+          <details><summary>模型输出</summary><pre>我们每天 09:00-22:00 营业，节假日正常营业。</pre></details>
+        </td>
+      </tr>
+      <tr class="pass">
+        <td class="mark">✓</td>
+        <td class="name">情绪安抚（裁判打分） </td>
+        <td class="score"><div class="sbar"><i style="width:90%"></i></div>90%</td>
+        <td class="lat">0ms</td>
+      </tr>
+      <tr class="detail pass">
+        <td></td>
+        <td colspan="3">
+          <div class="assert ok"><span>✓</span> <code>regex</code> 匹配正则 /^[\s\S]{6,}$/</div><div class="assert ok"><span>✓</span> <code>llm-judge</code> 裁判打分 0.80（阈值 0.6） · 礼貌且给出下一步</div>
+          <details><summary>模型输出</summary><pre>您好，很抱歉让您久等，我马上为您处理，请问是哪笔订单呢？</pre></details>
+        </td>
+      </tr></tbody></table>
+  <footer>Generated by evaldrift</footer>
+</div></body></html>
