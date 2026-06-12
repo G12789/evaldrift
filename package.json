@@ -1,10 +1,10 @@
 {
-  "name": "promptdrift",
+  "name": "evaldrift",
   "version": "0.1.0",
   "description": "Snapshot-style regression testing for LLM prompts & agents — catch silent quality drift when you tweak a prompt. China-model & Chinese-first (DeepSeek / Kimi / Qwen / Doubao / Ollama).",
   "type": "module",
   "bin": {
-    "promptdrift": "dist/cli.js"
+    "evaldrift": "dist/cli.js"
   },
   "files": [
     "dist",

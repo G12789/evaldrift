@@ -9,7 +9,7 @@ function bar(score: number, width = 10): string {
 
 export function printRun(run: RunResult, drift: DriftReport): void {
   console.log("");
-  console.log(pc.bold(`promptdrift · ${run.provider.type}/${run.provider.model}`));
+  console.log(pc.bold(`evaldrift · ${run.provider.type}/${run.provider.model}`));
   console.log(pc.dim("─".repeat(56)));
 
   for (const t of run.tests) {
@@ -53,7 +53,7 @@ export function printRun(run: RunResult, drift: DriftReport): void {
       );
     }
   } else {
-    console.log(pc.dim("（无基线，运行 `promptdrift baseline` 锁定当前结果作为基线）"));
+    console.log(pc.dim("（无基线，运行 `evaldrift baseline` 锁定当前结果作为基线）"));
   }
   console.log("");
 }

@@ -1,5 +1,5 @@
 # 示例：电商客服助手的回归测试。
-# 默认离线 mock，`promptdrift run` 立即可跑；想接真实模型见 templates/promptdrift.config.yaml 注释。
+# 默认离线 mock，`evaldrift run` 立即可跑；想接真实模型见 templates/evaldrift.config.yaml 注释。
 
 provider:
   type: mock

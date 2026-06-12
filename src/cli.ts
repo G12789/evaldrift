@@ -17,13 +17,13 @@ const VERSION = "0.1.0";
 
 function help(): void {
   console.log(`
-${pc.bold("promptdrift")} — 给 LLM prompt / agent 做快照式回归测试，改提示词时第一时间发现质量退化。
+${pc.bold("evaldrift")} — 给 LLM prompt / agent 做快照式回归测试，改提示词时第一时间发现质量退化。
 国产模型 & 中文优先（DeepSeek / Kimi / 通义 / 豆包 / Ollama）。
 
 用法:
-  promptdrift init                 在当前目录生成可直接跑的配置模板
-  promptdrift run [选项]           跑测试并对比基线
-  promptdrift baseline [选项]      跑一次并把结果锁定为基线
+  evaldrift init                 在当前目录生成可直接跑的配置模板
+  evaldrift run [选项]           跑测试并对比基线
+  evaldrift baseline [选项]      跑一次并把结果锁定为基线
 
 run / baseline 选项:
   -c, --config <path>   指定配置文件（默认自动查找）
@@ -44,14 +44,14 @@ async function cmdInit(): Promise<void> {
     console.log(pc.yellow(`已存在 ${CONFIG_NAMES[0]}，未覆盖。`));
     return;
   }
-  const tpl = join(PKG_ROOT, "templates", "promptdrift.config.yaml");
+  const tpl = join(PKG_ROOT, "templates", "evaldrift.config.yaml");
   if (existsSync(tpl)) {
     copyFileSync(tpl, target);
   } else {
     writeFileSync(target, FALLBACK_TEMPLATE, "utf8");
   }
   console.log(pc.green(`已生成 ${CONFIG_NAMES[0]}`));
-  console.log(pc.dim("它默认用离线 mock 模型，直接 `promptdrift run` 就能看到效果。"));
+  console.log(pc.dim("它默认用离线 mock 模型，直接 `evaldrift run` 就能看到效果。"));
   console.log(pc.dim("改成真实模型：把 provider.type 换成 openai，填 baseUrl / model / apiKeyEnv。"));
 }
 

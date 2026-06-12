@@ -4,9 +4,9 @@ import YAML from "yaml";
 import type { Config } from "./types.js";
 
 export const CONFIG_NAMES = [
-  "promptdrift.config.yaml",
-  "promptdrift.config.yml",
-  "promptdrift.config.json",
+  "evaldrift.config.yaml",
+  "evaldrift.config.yml",
+  "evaldrift.config.json",
 ];
 
 export function findConfig(cwd = process.cwd(), explicit?: string): string {
@@ -20,7 +20,7 @@ export function findConfig(cwd = process.cwd(), explicit?: string): string {
     if (existsSync(p)) return p;
   }
   throw new Error(
-    `当前目录没有配置文件（${CONFIG_NAMES.join(" / ")}）。先运行: promptdrift init`,
+    `当前目录没有配置文件（${CONFIG_NAMES.join(" / ")}）。先运行: evaldrift init`,
   );
 }
 

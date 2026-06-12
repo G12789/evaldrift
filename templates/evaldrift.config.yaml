@@ -1,4 +1,4 @@
-# promptdrift 配置 —— 默认用离线 mock 模型，`promptdrift run` 立即可见效果。
+# evaldrift 配置 —— 默认用离线 mock 模型，`evaldrift run` 立即可见效果。
 # 换成真实模型：把 provider 整段替换成下面任意一个注释示例即可。
 
 provider:

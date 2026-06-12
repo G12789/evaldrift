@@ -4,5 +4,5 @@ dist/
 .DS_Store
 .env
 .env.*
-# promptdrift run artifacts inside example/user projects
-.promptdrift/runs/
+# evaldrift run artifacts inside example/user projects
+.evaldrift/runs/

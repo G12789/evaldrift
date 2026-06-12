@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import type { RunResult } from "./types.js";
 
-export const ARTIFACT_DIR = ".promptdrift";
+export const ARTIFACT_DIR = ".evaldrift";
 export const BASELINE_FILE = "baseline.json";
 
 export function baselinePath(cwd = process.cwd()): string {

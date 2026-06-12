@@ -1,10 +1,10 @@
-# promptdrift
+# evaldrift
 
 > 给 LLM prompt / agent 做**快照式回归测试**——改一句提示词，第一时间知道有没有把别的用例悄悄改坏了。
 >
 > **国产模型 & 中文优先**：DeepSeek / Kimi / 通义 / 豆包 / 智谱 / 本地 Ollama 开箱即用。
 
-调 prompt 最大的坑是：你为了修好 A 场景改了提示词，结果悄悄把 B、C 场景弄坏了，而你根本没发现，直到用户来投诉。`promptdrift` 把这件事变成像跑单元测试一样简单——锁一个**基线**，之后每次改提示词跑一下，它直接告诉你**哪些用例退化了**。
+调 prompt 最大的坑是：你为了修好 A 场景改了提示词，结果悄悄把 B、C 场景弄坏了，而你根本没发现，直到用户来投诉。`evaldrift` 把这件事变成像跑单元测试一样简单——锁一个**基线**，之后每次改提示词跑一下，它直接告诉你**哪些用例退化了**。
 
 ```
 ✓ 退款问题  ██████████ 100%  120ms
@@ -20,7 +20,7 @@
 
 ## 为什么用它（而不是 promptfoo / deepeval）
 
-那些工具很好，但都是英文世界的，**对国产模型和中文评测支持很弱**。`promptdrift` 专门补这个空档：
+那些工具很好，但都是英文世界的，**对国产模型和中文评测支持很弱**。`evaldrift` 专门补这个空档：
 
 - **国产模型一等公民**：一个 `baseUrl` 切到 DeepSeek / Kimi / 通义 / 豆包 / 智谱，不用折腾 SDK。
 - **中文评测**：内置的 `llm-judge` 裁判提示、报告、报错全是中文。
@@ -32,16 +32,16 @@
 
 ```bash
 # 1. 生成配置（默认离线 mock，立即可跑）
-npx promptdrift init
+npx evaldrift init
 
 # 2. 跑测试
-npx promptdrift run
+npx evaldrift run
 
 # 3. 满意了就锁定基线
-npx promptdrift baseline
+npx evaldrift baseline
 
 # 4. 以后每次改完 prompt 再跑，自动对比基线、标出退化
-npx promptdrift run --html report.html
+npx evaldrift run --html report.html
 ```
 
 ## 接真实模型
@@ -114,9 +114,9 @@ tests:
 ## 命令
 
 ```
-promptdrift init                 生成配置模板
-promptdrift run [选项]           跑测试并对比基线
-promptdrift baseline [选项]      跑一次并锁定为基线
+evaldrift init                 生成配置模板
+evaldrift run [选项]           跑测试并对比基线
+evaldrift baseline [选项]      跑一次并锁定为基线
 
 选项:
   -c, --config <path>     指定配置文件
@@ -129,13 +129,13 @@ promptdrift baseline [选项]      跑一次并锁定为基线
 ## 放进 CI
 
 ```yaml
-# .github/workflows/promptdrift.yml
-- run: npx promptdrift run --fail-on regression
+# .github/workflows/evaldrift.yml
+- run: npx evaldrift run --fail-on regression
   env:
     DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
 ```
 
-把 `.promptdrift/baseline.json` 提交进仓库，PR 改了提示词导致退化时 CI 直接红灯。
+把 `.evaldrift/baseline.json` 提交进仓库，PR 改了提示词导致退化时 CI 直接红灯。
 
 ## 工作原理
 
@@ -146,7 +146,7 @@ promptdrift baseline [选项]      跑一次并锁定为基线
    对每个用例调用模型 ──► 跑断言打分 ──► 加权得出用例分
         │
         ▼
-   和 .promptdrift/baseline.json 逐用例对比
+   和 .evaldrift/baseline.json 逐用例对比
         │
         ▼
    终端表格 + HTML 报告 + CI 退出码（退化即非 0）
